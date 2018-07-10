@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#690d47a1">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/l_teamALogo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_toLeftOf="@id/l_vs"
+                android:background="#690d47a1"
+                android:contentDescription=" "
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/l_teamAName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/l_teamALogo"
+                android:background="#690d47a1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/l_vs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="#690d47a1"
+                android:text="vs"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/l_teamBLogo"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_toRightOf="@id/l_vs"
+                android:background="#690d47a1"
+                android:contentDescription=" "
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/l_teamBName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/l_teamBLogo"
+                android:background="#690d47a1"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/l_venue"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="#690d47a1"
+                android:text="  Venue: "
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/l_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="#690d47a1"
+                android:text="Date: "
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/l_time"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="#690d47a1"
+                android:text="Time"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
