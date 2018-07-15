@@ -30,6 +30,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             teamALogoList = (ImageView) view.findViewById(R.id.l_teamALogo);
             teamBNameList = (TextView) view.findViewById(R.id.l_teamBName);
             teamBLogoList = (ImageView) view.findViewById(R.id.l_teamBLogo);
+            venueList = (TextView) view.findViewById(R.id.l_venue);
+            mdateList = (TextView) view.findViewById(R.id.l_date);
+            mtimeList = (TextView) view.findViewById(R.id.l_time);
         }
     }
 
@@ -50,9 +53,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onBindViewHolder(MyViewHolder holder, int position) {
             matchFixtures data = mDataList.get(position);
             holder.teamANameList.setText(data.getTeamName(true));
-            holder.teamALogoList.setImageResource(data.getTeamImage(true));
+            //holder.teamALogoList.setImageResource(data.getTeamImage(true));
             holder.teamANameList.setText(data.getTeamName(false));
-            holder.teamALogoList.setImageResource(data.getTeamImage(false));
+            //holder.teamALogoList.setImageResource(data.getTeamImage(false));
+            holder.venueList.setText(data.getMatchVenue());
+            holder.mdateList.setText(data.getMatchDate());
+            holder.mtimeList.setText(data.getMatchTime());
         }
 
         @Override

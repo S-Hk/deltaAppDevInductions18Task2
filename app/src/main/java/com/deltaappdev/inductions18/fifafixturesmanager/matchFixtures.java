@@ -8,22 +8,45 @@ import java.util.Date;
 public class matchFixtures {
     //int matchNo;
     private String matchTeamA, matchTeamB;
-    private Date matchDate;
-    private Time matchTime;
+    private String matchDate;
+    private String matchTime;
     private String matchVenue;
 
-    int teamALogo, teamBLogo;
+    private byte[] teamALogo, teamBLogo;
 
     public matchFixtures() {
+
     }
 
 
-    public matchFixtures(String tA, String tB, int tIA, int tIB) {
+    public matchFixtures(String tA, String tB, byte[] tIA, byte[] tIB, String venue, String mDate, String mTime) {
+
         matchTeamA=tA;
         matchTeamB=tB;
         teamALogo=tIA;
         teamBLogo=tIB;
+        matchVenue=venue;
+        matchDate=mDate;
+        matchTime=mTime;
 
+    }
+
+    public matchFixtures(String matchTeamA, String matchTeamB, String matchDate, String matchTime, String matchVenue, byte[] teamALogo, byte[] teamBLogo) {
+        this.matchTeamA = matchTeamA;
+        this.matchTeamB = matchTeamB;
+        this.matchDate = matchDate;
+        this.matchTime = matchTime;
+        this.matchVenue = matchVenue;
+        this.teamALogo = teamALogo;
+        this.teamBLogo = teamBLogo;
+    }
+
+    public void setTeamALogo(byte[] teamALogo) {
+        this.teamALogo = teamALogo;
+    }
+
+    public void setTeamBLogo(byte[] teamBLogo) {
+        this.teamBLogo = teamBLogo;
     }
 
     public String getTeamName(boolean A) {
@@ -34,7 +57,7 @@ public class matchFixtures {
         }
     }
 
-    public int getTeamImage(boolean A){
+    public byte[] getTeamImage(boolean A){
         if (A) {
             return teamALogo;
         } else {
@@ -46,14 +69,13 @@ public class matchFixtures {
         return matchVenue;
     }
 
-    public Date getMatchDate() {
+    public String getMatchDate() {
         return matchDate;
     }
 
-    public Time getMatchTime() {
+    public String getMatchTime() {
         return matchTime;
     }
-
 
 
 }

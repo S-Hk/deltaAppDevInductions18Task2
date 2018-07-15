@@ -3,7 +3,10 @@ package com.deltaappdev.inductions18.fifafixturesmanager;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
@@ -11,6 +14,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +24,12 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -36,6 +47,18 @@ public class AddActivity extends AppCompatActivity {
 
 
     boolean iconSetTeamA;
+
+    private RecyclerViewAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private List<matchFixtures> matchDataArrayList= new ArrayList<>();
+
+    private matchFixtures matchData;
+
+
+
+    //for database
+    public static DatabaseHelper sqlLiteHelper;
+
 
 
     @Override
@@ -65,7 +88,7 @@ public class AddActivity extends AppCompatActivity {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelAddFixture();
+                closeAddFixture();
             }
         });
 
@@ -73,6 +96,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 storeFixture();
+                closeAddFixture();
             }
         });
   /**/
@@ -95,7 +119,7 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
-    public void cancelAddFixture() {
+    public void closeAddFixture() {
 
         Intent intentA = new Intent(this, MainActivity.class);
         startActivity(intentA);
@@ -117,13 +141,13 @@ public class AddActivity extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(AddActivity.this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddActivity.this, ":" + item.getTitle(), Toast.LENGTH_SHORT).show();
                 int selectedItemID = item.getItemId();
 
                 switch (selectedItemID) {
                     case R.id.optionCamera:
                         captureCamImage();
-                        Toast.makeText(AddActivity.this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddActivity.this, ">" + item.getTitle(), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.optionGallery:
                         captureGalleryImage();
@@ -171,7 +195,8 @@ public class AddActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
 
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Camera permission requesting...", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Camera permission requesting...", Toast.LENGTH_SHORT).show();
+
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
                 startCamCapture();
             } else {
@@ -186,10 +211,14 @@ public class AddActivity extends AppCompatActivity {
 
     public void startCamCapture() {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        //Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //startActivityForResult(cameraIntent, CAMERA_REQUEST);
-        startActivityForResult(cameraIntent, 0);
 
-
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(cameraIntent, 0);
+        } else {
+            Toast.makeText(this, "Error!!! 'cameraIntent.resolveActivity(getPackageManager()) = null' ", Toast.LENGTH_LONG).show();
+        }
         /*
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //startActivityForResult(intent, 0);
@@ -251,35 +280,121 @@ public class AddActivity extends AppCompatActivity {
 */
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        Toast.makeText(this, "ACTIVITY RESULT", Toast.LENGTH_LONG).show();
-        switch(requestCode) {
-            case 0:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    if (iconSetTeamA) {
-                        imageViewT1.setImageURI(selectedImage);
-                    } else {
-                        imageViewT2.setImageURI(selectedImage);
-                    }
-                }
 
-                break;
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    if (iconSetTeamA) {
-                        imageViewT1.setImageURI(selectedImage);
-                    } else {
-                        imageViewT2.setImageURI(selectedImage);
+        Toast.makeText(this, "ACTIVITY RESULT:", Toast.LENGTH_SHORT).show();
+
+        if (imageReturnedIntent != null) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK) {
+                        Bundle extras = imageReturnedIntent.getExtras();
+                        if (extras.get("data") != null) {
+                            Bitmap imgBitmap = (Bitmap) extras.get("data");
+
+                            if (iconSetTeamA) {
+                                imageViewT1.setImageBitmap(imgBitmap);
+                            } else {
+                                imageViewT2.setImageBitmap(imgBitmap);
+                            }
+                        } else {
+                            Toast.makeText(this, "Error!!! >'extras.get(\"data\") = null'<", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        /*
+                        Uri selectedImage = imageReturnedIntent.getData();
+
+                        if (selectedImage != null) {
+                            try {
+                                InputStream inputStream = getContentResolver().openInputStream(selectedImage);
+                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+                                if (iconSetTeamA) {
+                                    imageViewT1.setImageBitmap(bitmap);
+                                } else {
+                                    imageViewT2.setImageBitmap(bitmap);
+                                }
+
+
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(this, "SelectedImage null", Toast.LENGTH_LONG).show();
+                        }
+                        */
                     }
-                }
-                break;
+
+                    break;
+                case 1:
+                    if (resultCode == RESULT_OK) {
+                        Uri selectedImage = imageReturnedIntent.getData();
+                        if (iconSetTeamA) {
+                            imageViewT1.setImageURI(selectedImage);
+                        } else {
+                            imageViewT2.setImageURI(selectedImage);
+                        }
+                    }
+                    break;
+            }
+        } else {
+            Toast.makeText(this, "No image data returned!!!", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public void storeFixture(){
+        Toast.makeText(this, "Saving Match Data...", Toast.LENGTH_LONG).show();
+        try {
+            /*
+            matchData= new matchFixtures(editTextTN1.getText().toString().trim(),
+                                        editTextTN2.getText().toString().trim(),
+                                        imageViewToByte(imageViewT1),
+                                        imageViewToByte(imageViewT2),
+                                        editTextTN1.getText().toString().trim(),
+                                        editTextTN1.getText().toString().trim(),
+                                        editTextTN1.getText().toString().trim()
+                                );
+
+            if (matchData != null) {
+                sqlLiteHelper.insertDatamatchFixture(matchData);
+
+            } else {
+                Toast.makeText(this, ">>matchData NULL!", Toast.LENGTH_LONG).show();
+            }
+            */
+
+            sqlLiteHelper.insertData(editTextTN1.getText().toString().trim(),
+                    editTextTN2.getText().toString().trim(),
+                    editTextTN1.getText().toString().trim(),
+                    editTextTN1.getText().toString().trim(),
+                    editTextTN1.getText().toString().trim(),
+                    imageViewToByte(imageViewT1),
+                    imageViewToByte(imageViewT2)
+            );
 
 
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error!!! Match Data Saving Failed! ", Toast.LENGTH_SHORT).show();
+            String TAG="Debug";
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
+
+
+
+    }
+
+    private byte[] imageViewToByte(ImageView image) {
+        Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
+
+        byte[] byteArray = stream.toByteArray();
+        return  byteArray;
     }
 
 

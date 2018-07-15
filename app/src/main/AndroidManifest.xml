@@ -3,8 +3,8 @@
     package="com.deltaappdev.inductions18.fifafixturesmanager">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false"/>
-
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
 
 
     <application
