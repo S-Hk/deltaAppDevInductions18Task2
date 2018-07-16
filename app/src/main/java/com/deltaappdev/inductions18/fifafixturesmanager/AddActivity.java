@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,8 +68,7 @@ public class AddActivity extends AppCompatActivity {
 /**/
         initialise();
 
-        sqlLiteHelper = new DatabaseHelper(this, "MatchFixturesDB.sqllite", null, 1);
-
+        sqlLiteHelper = new DatabaseHelper(this, "MatchFixtureDB.sqllite", null, 1);
 
         imageViewT1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -369,19 +367,17 @@ public class AddActivity extends AppCompatActivity {
 
             sqlLiteHelper.insertData(editTextTN1.getText().toString().trim(),
                     editTextTN2.getText().toString().trim(),
-                    editTextTN2.getText().toString().trim(),
-                    editTextTN2.getText().toString().trim(),
-                    editTextTN2.getText().toString().trim(),
-
-
-                    /*
                     editTextVenue.getText().toString().trim(),
                     editTextDate.getText().toString().trim(),
                     editTextTime.getText().toString().trim(),
-                    */
                     imageViewToByte(imageViewT1),
                     imageViewToByte(imageViewT2)
             );
+
+            Toast.makeText(this, "Data added successfully!!!", Toast.LENGTH_SHORT).show();
+
+
+
 
 
         } catch (Exception e) {

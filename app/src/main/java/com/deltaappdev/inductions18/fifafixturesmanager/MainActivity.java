@@ -1,6 +1,5 @@
 package com.deltaappdev.inductions18.fifafixturesmanager;
 
-import android.app.Application;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private matchFixtures matchData;
 
-    //public static DatabaseHelper sqlLiteHelper;
+   public static DatabaseHelper sqlLiteHelper;
 
 
     @Override
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         initialise();
 
-        //loadMatchFixtures();
+        loadMatchFixtures();
 
         buttonAddMain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +87,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadMatchFixtures() {
-        AddActivity.sqlLiteHelper = new DatabaseHelper(this, "MatchFixturesDB.sqllite", null, 1);
-        //sqlLiteHelper = new DatabaseHelper(this, "MatchFixturesDB.sqllite", null, 1);
-        Cursor cursor = AddActivity.sqlLiteHelper.getData("SELECT * FROM fixtures_table");
+        sqlLiteHelper = new DatabaseHelper(this, "MatchFixtureDB.sqllite", null, 1);
+        Cursor cursor = sqlLiteHelper.getData("SELECT * FROM fixtures_table");
         matchDataArrayList.clear();
 
         while (cursor.moveToNext()) {
