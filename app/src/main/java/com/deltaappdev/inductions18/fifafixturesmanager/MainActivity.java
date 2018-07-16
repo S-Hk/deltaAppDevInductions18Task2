@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         initialise();
 
-        loadMatchFixtures();
+        //loadMatchFixtures();
 
         buttonAddMain.setOnClickListener(new View.OnClickListener() {
             @Override

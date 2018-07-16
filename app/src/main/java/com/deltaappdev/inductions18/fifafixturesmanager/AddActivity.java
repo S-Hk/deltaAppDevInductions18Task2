@@ -347,23 +347,6 @@ public class AddActivity extends AppCompatActivity {
     public void storeFixture(){
         Toast.makeText(this, "Saving Match Data...", Toast.LENGTH_LONG).show();
         try {
-            /*
-            matchData= new matchFixtures(editTextTN1.getText().toString().trim(),
-                                        editTextTN2.getText().toString().trim(),
-                                        imageViewToByte(imageViewT1),
-                                        imageViewToByte(imageViewT2),
-                                        editTextTN1.getText().toString().trim(),
-                                        editTextTN1.getText().toString().trim(),
-                                        editTextTN1.getText().toString().trim()
-                                );
-
-            if (matchData != null) {
-                sqlLiteHelper.insertDatamatchFixture(matchData);
-
-            } else {
-                Toast.makeText(this, ">>matchData NULL!", Toast.LENGTH_LONG).show();
-            }
-            */
 
             sqlLiteHelper.insertData(editTextTN1.getText().toString().trim(),
                     editTextTN2.getText().toString().trim(),
