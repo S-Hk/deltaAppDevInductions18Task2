@@ -1,5 +1,7 @@
 package com.deltaappdev.inductions18.fifafixturesmanager;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,18 +54,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             matchFixtures data = mDataList.get(position);
+            byte[] teamIconA = data.getTeamImage(true);
+            byte[] teamIconB = data.getTeamImage(false);
+            Bitmap bitmapA = BitmapFactory.decodeByteArray(teamIconA, 0,teamIconA.length);
+            Bitmap bitmapB = BitmapFactory.decodeByteArray(teamIconB, 0,teamIconB.length);
+
             holder.teamANameList.setText(data.getTeamName(true));
             //holder.teamALogoList.setImageResource(data.getTeamImage(true));
-            holder.teamANameList.setText(data.getTeamName(false));
-            //holder.teamALogoList.setImageResource(data.getTeamImage(false));
-            holder.venueList.setText(data.getMatchVenue());
-            holder.mdateList.setText(data.getMatchDate());
-            holder.mtimeList.setText(data.getMatchTime());
+            holder.teamALogoList.setImageBitmap(bitmapA);
+            holder.teamBNameList.setText(data.getTeamName(false));
+            //holder.teamBLogoList.setImageResource(data.getTeamImage(false));
+            holder.teamBLogoList.setImageBitmap(bitmapB);
+            holder.venueList.setText("Venue: "+data.getMatchVenue());
+            holder.mdateList.setText("Date: "+data.getMatchDate());
+            holder.mtimeList.setText("Time: "+data.getMatchTime());
         }
 
         @Override
         public int getItemCount() {
             return mDataList.size();
         }
+
 }
 

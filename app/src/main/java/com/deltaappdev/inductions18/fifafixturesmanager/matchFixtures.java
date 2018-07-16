@@ -15,9 +15,7 @@ public class matchFixtures {
     private byte[] teamALogo, teamBLogo;
 
     public matchFixtures() {
-
     }
-
 
     public matchFixtures(String tA, String tB, byte[] tIA, byte[] tIB, String venue, String mDate, String mTime) {
 

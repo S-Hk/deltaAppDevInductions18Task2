@@ -48,12 +48,13 @@ public class AddActivity extends AppCompatActivity {
 
     boolean iconSetTeamA;
 
+    /*
     private RecyclerViewAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private List<matchFixtures> matchDataArrayList= new ArrayList<>();
 
     private matchFixtures matchData;
-
+    */
 
 
     //for database
@@ -67,6 +68,8 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
 /**/
         initialise();
+
+        sqlLiteHelper = new DatabaseHelper(this, "MatchFixturesDB.sqllite", null, 1);
 
 
         imageViewT1.setOnClickListener(new View.OnClickListener() {
@@ -366,15 +369,19 @@ public class AddActivity extends AppCompatActivity {
 
             sqlLiteHelper.insertData(editTextTN1.getText().toString().trim(),
                     editTextTN2.getText().toString().trim(),
-                    editTextTN1.getText().toString().trim(),
-                    editTextTN1.getText().toString().trim(),
-                    editTextTN1.getText().toString().trim(),
+                    editTextTN2.getText().toString().trim(),
+                    editTextTN2.getText().toString().trim(),
+                    editTextTN2.getText().toString().trim(),
+
+
+                    /*
+                    editTextVenue.getText().toString().trim(),
+                    editTextDate.getText().toString().trim(),
+                    editTextTime.getText().toString().trim(),
+                    */
                     imageViewToByte(imageViewT1),
                     imageViewToByte(imageViewT2)
             );
-
-
-
 
 
         } catch (Exception e) {
